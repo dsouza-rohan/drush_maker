@@ -5,8 +5,8 @@ drush_maker.py ---help article
  
  use current directory 
  
- `python rush_maker.py` 
+ `python drush_maker.py` 
  
  provide target path
  
- `python rush_maker.py /path/to/repo/` 
+ `python drush_maker.py /path/to/repo/` 
