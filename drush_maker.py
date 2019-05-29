@@ -20,7 +20,7 @@ class drush_maker:
     def __del__(self):
         print "Script done!!"
 
-    def all_branches(self, repo):
+    def list_all_branches(self, repo):
         branches = repo.branches
         for branch in branches:
             print branch
