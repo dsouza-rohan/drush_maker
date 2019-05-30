@@ -1,9 +1,9 @@
-drush_maker.py ---help article 
+drush_maker.py -- help article 
  
  
  Run as below: 
  
- use current directory 
+ if make file is in current directory 
  
  `python drush_maker.py` 
  

@@ -11,6 +11,7 @@ class drush_maker:
 
     path = ""
     tags = ""
+    folder_name = ""
 
     def __init__(self, mode):
         self.mode = mode
@@ -37,10 +38,10 @@ class drush_maker:
                 print "{}|{}".format(fe.ref, fe.flags)
         print('Repo Git fetch complete..')
 
-    def gzip_local_folder(self, path):
+    def gzip_local_folder(self, path, file_name):
         # get current date
         now = datetime.datetime.now()
-        zip_file_name = self.plugin_path + "_" + now.strftime("%Y%m%d_%H%M") + '.zip'
+        zip_file_name = self.plugin_path + file_name + "_" + now.strftime("%Y%m%d_%H%M") + '.zip'
         zipf = zipfile.ZipFile(zip_file_name, 'w', zipfile.ZIP_DEFLATED)
         # Done: add non root target dir to zip file
 
@@ -90,18 +91,19 @@ class drush_maker:
                 time.sleep(2)
 
                 # run drush
-                folder_name = "drupal_code_{}".format(str(to_tag_name))
-                print "Running drush make, target folder={}".format(folder_name)
+                self.folder_name = "drupal_code_{}".format(str(to_tag_name))
+                print "Running drush make, target folder={}".format(self.folder_name)
 
-                drush_cmd = "drush make {}drupal.make {} --force-complete".format(self.plugin_path, folder_name)
+                # todo: fix drush target folder path
+                drush_cmd = "drush make {}drupal.make {} --force-complete".format(self.plugin_path, self.folder_name)
                 os.system(drush_cmd)
 
                 print "Create Zip file.. \nPlease Enter y/n"
                 progress = raw_input()
                 if progress == 'y':
                     # zip the folder
-                    to_zip_dir = self.plugin_path + folder_name
-                    zip_stout = self.gzip_local_folder(to_zip_dir)
+                    to_zip_dir = self.plugin_path + self.folder_name
+                    zip_stout = self.gzip_local_folder(to_zip_dir, self.folder_name)
                     print zip_stout
 
                 else:
