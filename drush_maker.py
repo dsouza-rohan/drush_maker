@@ -9,7 +9,7 @@ from git import Repo
 class drush_maker:
     """Simple Drupal make built class"""
 
-    mode = ""
+    path = ""
     tags = ""
 
     def __init__(self, mode):
@@ -93,7 +93,7 @@ class drush_maker:
                 folder_name = "drupal_code_{}".format(str(to_tag_name))
                 print "Running drush make, target folder={}".format(folder_name)
 
-                drush_cmd = "drush make drupal.make {} --force-complete".format(folder_name)
+                drush_cmd = "drush make {}drupal.make {} --force-complete".format(self.plugin_path, folder_name)
                 os.system(drush_cmd)
 
                 print "Create Zip file.. \nPlease Enter y/n"
@@ -118,8 +118,8 @@ class drush_maker:
 def runner_handler(event):
     if len(event) > 0:
         fc = drush_maker
-        # todo: pass target folder/repo tp script
-        fc.make_platform(drush_maker(event['path']))
+        #  pass target folder/repo to script
+        fc.make_platform(drush_maker("todo"), event['path'])
 
 
 # Local testing
@@ -128,10 +128,10 @@ def runner_handler(event):
 print sys.argv
 
 if len(sys.argv) > 1:
-    event_local = {'path':  sys.argv[1], 'vzn': sys.argv[2]}
+    event_local = {'path':  sys.argv[1]}
     runner_handler(event_local)
 else:
-    event_local = {'path': "", 'vzn': ''}
+    event_local = {'path': ""}
     runner_handler(event_local)
 
 
