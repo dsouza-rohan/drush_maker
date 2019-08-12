@@ -3,6 +3,7 @@ import sys
 import time
 import zipfile
 import datetime
+import git
 from git import Repo
 
 
@@ -106,6 +107,17 @@ class drush_maker:
                     zip_stout = self.gzip_local_folder(to_zip_dir, self.folder_name)
                     print zip_stout
 
+                    print "Please enter the Git user name (User id):- "
+                    gitUserName = raw_input()
+                    print "Please enter the Acquia Subscription or Git repository name:- "
+                    repoName = raw_input()
+                    gitCloneUrl = "git@github.com:{}/{}.git".format(str(gitUserName),str(repoName))
+                    print "{} \n Please Confirm your Git URL \n Press y/n".format(str(gitCloneUrl))
+                    progress = raw_input()
+                    if progress == 'y':
+                        print "Command Running... \n  git.Git('{}').clone('{}')".format(self.plugin_path, str(gitCloneUrl))
+                        git.Git(self.plugin_path).clone(gitCloneUrl)
+
                 else:
                     print "Script ended!!"
 
@@ -135,5 +147,4 @@ if len(sys.argv) > 1:
 else:
     event_local = {'path': ""}
     runner_handler(event_local)
-
 
