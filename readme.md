@@ -7,6 +7,10 @@ https://gitpython.readthedocs.io/en/stable/intro.html#installing-gitpython
 
 3.  Setup Acquia aliases
 
+4. Install python-docx : https://python-docx.readthedocs.io/en/latest/
+
+5. Install PyYAML: https://pypi.org/project/PyYAML/
+
 ------------
  ## Drush Maker
 
@@ -37,11 +41,7 @@ drush_maker.py -- help article
 
 OR `debug_ssh` to solve ssh-agent issue
 
+ To run `otl_doc` command
+create a simple_task.yaml file.
+
 ---------------
-## Box Mover
-Install Box API sdk for Python:
-> pip install boxsdk
-
-Dev token:
-
-https://developer.box.com/docs/authenticate-with-developer-token
