@@ -137,6 +137,3 @@ else:
     runner_handler(event_local)
 
 
-# todo: write doc file, https://python-docx.readthedocs.io/en/latest/
-
-
