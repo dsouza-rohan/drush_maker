@@ -1,7 +1,9 @@
 import os
 import sys
+import subprocess
 import acapi
-
+from docx import Document
+import yaml
 
 class AcqUtility:
     """Simple AcqUtility utility class"""
@@ -47,6 +49,27 @@ class AcqUtility:
             # for env in envs:
             #     print "Env: {env} SSH Host: {host}".format(env=env, host=envs[env]['ssh_host'])
 
+    def get_acq_site_name(self):
+        c = acapi.Client()
+        site = c.site(self.acq_sub)
+        domains = site.environment(self.acq_env).domains()
+        domain_str = ""
+        for domain in domains:
+            domain_str += "{},".format(domain)
+
+        return domain_str.strip(",")
+
+    def get_otl_settings(self):
+        setting = ""
+        if os.path.exists('simple_task.yaml'):
+            with open("simple_task.yaml", 'r') as stream:
+                try:
+                    setting = yaml.safe_load(stream)
+                except yaml.YAMLError as exc:
+                    print(exc)
+
+        return setting
+
     def run_scripts(self, action):
 
         if action == "coder":
@@ -56,8 +79,7 @@ class AcqUtility:
             self.mk_site_uli()
 
         elif action == "otl_doc":
-            print action
-            # todo: otl doc script..
+            self.mk_site_uli_doc()
 
         elif action == "db_dump":
             print action
@@ -86,6 +108,36 @@ class AcqUtility:
 
         os.system("drush {alias} uli 1 --no-browser".format(alias=alias))
 
+    def mk_site_uli_doc(self):
+
+        site_names = self.get_acq_site_name()
+        alias = self.mk_acq_client()
+
+        save_file = 'otl_doc_{sub}.docx'.format(sub=self.acq_sub)
+
+        commands = self.get_otl_settings()
+        if commands == "":
+            print "To run 'otl_doc' command create a simple_task.yaml file"
+            return False
+
+        document = Document()
+        document.add_heading('OTL Document -- {}'.format(self.acq_sub), 0)
+        document.add_paragraph('Site Name: {name}'.format(name=site_names))
+        document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
+
+        for todo_text,cmd in commands.items():
+            proc = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
+            (out, err) = proc.communicate()
+
+            document.add_paragraph(todo_text)
+            font = document.add_paragraph("output:\n  {}".format(out))
+            font.highlight_color = "red"
+            document.add_page_break()
+
+        document.save(save_file)
+
+        # todo: check ssl certificate of prod site.
+
     def run_ssh_agent(self):
         os.system("eval $(ssh-agent -s)")
         os.system("ssh-add {path}".format(path=self.pub_key_path))
@@ -108,7 +160,7 @@ else:
         if sys.argv[1] == "--help":
 
             print "\n  simple_task.py [action] [subscription] [environment] \n" \
-                  " action--> [coder| otl| otl_docs| db_dump ..]\n" \
+                  " action--> [coder| otl| otl_doc| db_dump ..]\n" \
                   " subscription--> Subscription of the site\n" \
                   " environment--> [dev | test]\n " \
                   "\nOR debug_ssh to solve ssh-agent issue"

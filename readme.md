@@ -1,4 +1,4 @@
-Prerequisites:
+Prerequisites for Scripts:
 
 1.  Ensure you have Python version 2: run `python --version`
 
@@ -7,7 +7,12 @@ https://gitpython.readthedocs.io/en/stable/intro.html#installing-gitpython
 
 3.  Setup Acquia aliases
 
+4. Install python-docx : https://python-docx.readthedocs.io/en/latest/
+
+5. Install PyYAML: https://pypi.org/project/PyYAML/
+
 ------------
+ ## Drush Maker
 
 drush_maker.py -- help article 
  
@@ -23,6 +28,7 @@ drush_maker.py -- help article
  `python drush_maker.py /path/to/repo/` 
  
  ------------
+ ## Simple Tasks
  
  `python simple_task.py --help`
  
@@ -34,3 +40,8 @@ drush_maker.py -- help article
 `environment [ dev | test ]`
 
 OR `debug_ssh` to solve ssh-agent issue
+
+ To run `otl_doc` command
+create a simple_task.yaml file.
+
+---------------

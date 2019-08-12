@@ -1,3 +1,4 @@
 .idea/*
 venv/*
 .env
+drupal_code_*

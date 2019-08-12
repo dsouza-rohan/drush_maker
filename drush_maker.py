@@ -147,3 +147,4 @@ if len(sys.argv) > 1:
 else:
     event_local = {'path': ""}
     runner_handler(event_local)
+
