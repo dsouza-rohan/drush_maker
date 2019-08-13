@@ -1,3 +1,24 @@
 
-# OTL commands to run
 
+## Simple Task setting:
+
+# Allowed Environments:
+allowed_env:
+  - dev
+  - stage
+
+# Set /path/to/ssh.pem file
+my_key_path : "/your/path/to/ssh.pem"
+
+
+# OTL commands to run
+one_time_link:
+ 'Password Policy module MUST be enabled' : 'drush {alias} pmi password_policy'
+ 'Flood control variables MUST be configured correctly' : 'drush {alias} vget user_fail'
+
+# Coder commands to run
+coder_report:
+  'Enable Coder module'     : 'drush {alias} en coder -y'
+  'Run Coder-Review module' : 'drush {alias} coder-review'
+  'Disable Coder module'    : 'drush {alias} dis coder -y'
+  'Uninstall Coder module'  : 'drush {alias} pmu coder -y'

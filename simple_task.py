@@ -5,6 +5,7 @@ import acapi
 from docx import Document
 import yaml
 
+
 class AcqUtility:
     """Simple AcqUtility utility class"""
 
@@ -16,15 +17,28 @@ class AcqUtility:
     allowed = ["dev", "test", "dev6"]
     pub_key_path = ""
     pub_key_pass = ""
+    local_dir = ""
     mode = "drush"  # drush | ssh
+    run_setting = ""
 
     def __init__(self, action, sub, env):
         self.action = action
         self.acq_env = env
         self.acq_sub = sub
 
-        self.local_dir = "../../MyKeys/rohan_ssh2.pem"  # replace with file name
-        self.pub_key_path = os.getcwd() + "/" + self.local_dir
+        self.run_setting = self.get_run_settings()
+        if self.run_setting == "":
+            print "To run the script create a simple_task.yaml file"
+        else:
+            if "my_key_path" in self.run_setting.keys():
+                self.pub_key_path = self.run_setting.get('my_key_path')
+            else:
+                sys.exit("my_key_path is not set in yaml")
+
+            if "allowed_env" in self.run_setting.keys():
+                self.allowed = self.run_setting.get('allowed_env')
+            else:
+                sys.exit("allowed_env is not set in yaml")
 
         print "start--"
 
@@ -41,10 +55,9 @@ class AcqUtility:
                 return drush_alias
 
             elif self.mode == "ssh":
-                print "No ssh mode available...yet"
+                sys.exit("No ssh mode available...yet")
         else:
-            print "Connection to {} is not allowed".format(self.acq_env)
-
+            sys.exit("Connection to {} is not allowed".format(self.acq_env))
             # ==>Available envs are !!
             # for env in envs:
             #     print "Env: {env} SSH Host: {host}".format(env=env, host=envs[env]['ssh_host'])
@@ -96,15 +109,17 @@ class AcqUtility:
         # todo:  and 5x b-fix queries...?
 
     def mk_coder_report(self):
-
         alias = self.mk_acq_client()
+        commands = self.run_setting
 
-        os.system("drush {alias} en coder -y".format(alias=alias))
-        os.system("drush {alias} coder-review".format(alias=alias))
-        os.system("drush {alias} dis coder -y".format(alias=alias))
-        os.system("drush {alias} pmu coder -y".format(alias=alias))
+        if "coder_report" in commands.keys():
+            coder_report = commands.get('coder_report')
 
-        # todo: save coder output to file
+            for todo_text, cmd in coder_report.items():
+                process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
+                (out, err) = process.communicate()
+                print out
+                # todo: save coder output to file
 
     def mk_site_uli(self):
 
@@ -114,16 +129,11 @@ class AcqUtility:
 
     def mk_site_uli_doc(self):
 
-        site_names = self.get_acq_site_name()
         alias = self.mk_acq_client()
+        site_names = self.get_acq_site_name()
+        commands = self.run_setting
 
         save_file = 'otl_doc_{sub}.docx'.format(sub=self.acq_sub)
-
-        commands = self.get_run_settings()
-
-        if commands == "":
-            print "To run 'otl_doc' command create a simple_task.yaml file"
-            return False
 
         if "one_time_link" in commands.keys():
             commands = commands.get('one_time_link')
