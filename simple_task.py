@@ -85,7 +85,11 @@ class AcqUtility:
             print action
             # todo: db dump...
 
-        elif action == "ssh_agent":
+        elif action == "yaml_valid":
+            commands = self.get_otl_settings()
+            print commands
+
+        elif action == "debug_ssh":
             print action
             self.run_ssh_agent()
 
@@ -157,18 +161,20 @@ if len(sys.argv) == 4:
     runner_handler(event_local)
 else:
     if len(sys.argv) == 2:
+        debug = ["debug_ssh", "yaml_valid"]
         if sys.argv[1] == "--help":
 
             print "\n  simple_task.py [action] [subscription] [environment] \n" \
                   " action--> [coder| otl| otl_doc| db_dump ..]\n" \
                   " subscription--> Subscription of the site\n" \
                   " environment--> [dev | test]\n " \
-                  "\nOR debug_ssh to solve ssh-agent issue"
+                  "\nOR debug_ssh to solve ssh-agent issue \n" \
+                  "yaml_valid , to validate yaml file"
 
-        elif sys.argv[1] == "debug_ssh":
+        elif sys.argv[1] in debug:
 
-            bf = AcqUtility
-            bf.run_ssh_agent(AcqUtility(0, 0, 0))
+            event_local = {'action': sys.argv[1], 'sub': 0, 'env': 0}
+            runner_handler(event_local)
 
         else:
             print "3 parameters required. Please use --help"
