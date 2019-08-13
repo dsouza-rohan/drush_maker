@@ -59,7 +59,7 @@ class AcqUtility:
 
         return domain_str.strip(",")
 
-    def get_otl_settings(self):
+    def get_run_settings(self):
         setting = ""
         if os.path.exists('simple_task.yaml'):
             with open("simple_task.yaml", 'r') as stream:
@@ -86,7 +86,7 @@ class AcqUtility:
             # todo: db dump...
 
         elif action == "yaml_valid":
-            commands = self.get_otl_settings()
+            commands = self.get_run_settings()
             print commands
 
         elif action == "debug_ssh":
@@ -119,28 +119,36 @@ class AcqUtility:
 
         save_file = 'otl_doc_{sub}.docx'.format(sub=self.acq_sub)
 
-        commands = self.get_otl_settings()
+        commands = self.get_run_settings()
+
         if commands == "":
             print "To run 'otl_doc' command create a simple_task.yaml file"
             return False
 
-        document = Document()
-        document.add_heading('OTL Document -- {}'.format(self.acq_sub), 0)
-        document.add_paragraph('Site Name: {name}'.format(name=site_names))
-        document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
+        if "one_time_link" in commands.keys():
+            commands = commands.get('one_time_link')
 
-        for todo_text,cmd in commands.items():
-            proc = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
-            (out, err) = proc.communicate()
+            document = Document()
+            document.add_heading('OTL Document -- {}'.format(self.acq_sub), 0)
+            document.add_paragraph('Site Name: {name}'.format(name=site_names))
+            document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
 
-            document.add_paragraph(todo_text)
-            font = document.add_paragraph("output:\n  {}".format(out))
-            font.highlight_color = "red"
-            document.add_page_break()
+            for todo_text, cmd in commands.items():
+                process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
+                (out, err) = process.communicate()
 
-        document.save(save_file)
+                document.add_paragraph(todo_text)
+                font = document.add_paragraph("output:\n  {}".format(out))
+                font.highlight_color = "red"
+                document.add_page_break()
 
-        # todo: check ssl certificate of prod site.
+            document.save(save_file)
+
+            # todo: check ssl certificate of prod site.
+
+        else:
+            print "Config 'one_time_link' missing, simple_task.yaml file"
+            return False
 
     def run_ssh_agent(self):
         os.system("eval $(ssh-agent -s)")
