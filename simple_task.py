@@ -4,7 +4,8 @@ import subprocess
 import acapi
 from docx import Document
 import yaml
-
+import datetime
+import time
 
 class AcqUtility:
     """Simple AcqUtility utility class"""
@@ -132,8 +133,8 @@ class AcqUtility:
         alias = self.mk_acq_client()
         site_names = self.get_acq_site_name()
         commands = self.run_setting
-
-        save_file = 'otl_doc_{sub}.docx'.format(sub=self.acq_sub)
+        now_time = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H:%M:%S')
+        save_file = 'otl_doc_{sub}_{date}.docx'.format(sub=self.acq_sub, date=now_time)
 
         if "one_time_link" in commands.keys():
             commands = commands.get('one_time_link')
