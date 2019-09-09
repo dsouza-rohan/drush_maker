@@ -4,6 +4,7 @@ Prerequisites for Scripts:
 
 2.  Install Git for Python :
 https://gitpython.readthedocs.io/en/stable/intro.html#installing-gitpython
+https://pypi.org/project/GitPython/
 
 3.  Setup Acquia aliases
 

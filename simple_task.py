@@ -2,10 +2,11 @@ import os
 import sys
 import subprocess
 import acapi
-from docx import Document
+import docx
 import yaml
 import datetime
 import time
+
 
 class AcqUtility:
     """Simple AcqUtility utility class"""
@@ -29,7 +30,7 @@ class AcqUtility:
 
         self.run_setting = self.get_run_settings()
         if self.run_setting == "":
-            print "To run the script create a simple_task.yaml file"
+            print("To run the script create a simple_task.yaml file")
         else:
             if "my_key_path" in self.run_setting.keys():
                 self.pub_key_path = self.run_setting.get('my_key_path')
@@ -41,10 +42,10 @@ class AcqUtility:
             else:
                 sys.exit("allowed_env is not set in yaml")
 
-        print "start--"
+        print("start--")
 
     def __del__(self):
-        print "done--"
+        print("done--")
 
     def mk_acq_client(self):
 
@@ -96,15 +97,15 @@ class AcqUtility:
             self.mk_site_uli_doc()
 
         elif action == "db_dump":
-            print action
+            print(action)
             # todo: db dump...
 
         elif action == "yaml_valid":
             commands = self.get_run_settings()
-            print commands
+            print(commands)
 
         elif action == "debug_ssh":
-            print action
+            print(action)
             self.run_ssh_agent()
 
         # todo:  and 5x b-fix queries...?
@@ -119,7 +120,7 @@ class AcqUtility:
             for todo_text, cmd in coder_report.items():
                 process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
                 (out, err) = process.communicate()
-                print out
+                print(out)
                 # todo: save coder output to file
 
     def mk_site_uli(self):
@@ -139,7 +140,7 @@ class AcqUtility:
         if "one_time_link" in commands.keys():
             commands = commands.get('one_time_link')
 
-            document = Document()
+            document = docx.Document()
             document.add_heading('OTL Document -- {}'.format(self.acq_sub), 0)
             document.add_paragraph('Site Name: {name}'.format(name=site_names))
             document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
@@ -158,7 +159,7 @@ class AcqUtility:
             # todo: check ssl certificate of prod site.
 
         else:
-            print "Config 'one_time_link' missing, simple_task.yaml file"
+            print("Config 'one_time_link' missing, simple_task.yaml file")
             return False
 
     def run_ssh_agent(self):
@@ -173,7 +174,7 @@ def runner_handler(event):
         bf.run_scripts(AcqUtility(event['action'], event['sub'], event['env']), event['action'])
 
 
-print sys.argv
+print(sys.argv)
 
 if len(sys.argv) == 4:
     event_local = {'action':  sys.argv[1], 'sub':  sys.argv[2], 'env':  sys.argv[3]}
@@ -183,12 +184,12 @@ else:
         debug = ["debug_ssh", "yaml_valid"]
         if sys.argv[1] == "--help":
 
-            print "\n  simple_task.py [action] [subscription] [environment] \n" \
+            print("\n  simple_task.py [action] [subscription] [environment] \n" \
                   " action--> [coder| otl| otl_doc| db_dump ..]\n" \
                   " subscription--> Subscription of the site\n" \
                   " environment--> [dev | test]\n " \
                   "\nOR debug_ssh to solve ssh-agent issue \n" \
-                  "yaml_valid , to validate yaml file"
+                  "yaml_valid , to validate yaml file")
 
         elif sys.argv[1] in debug:
 
@@ -196,9 +197,9 @@ else:
             runner_handler(event_local)
 
         else:
-            print "3 parameters required. Please use --help"
+            print("3 parameters required. Please use --help")
     else:
-        print "use --help"
+        print("use --help")
 
     # Local testing
     event_local = {'action': "", 'sub': "", 'env':  "dev"}

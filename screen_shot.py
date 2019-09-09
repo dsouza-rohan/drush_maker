@@ -9,10 +9,10 @@ class ScreenShot:
     driver = ""
 
     def __init__(self):
-        print "ScreenShot--start"
+        print("ScreenShot--start")
 
     def __del__(self):
-        print "ScreenShot--done"
+        print("ScreenShot--done")
 
     def open_firefox(self, url_open):
         # create a new Firefox session
