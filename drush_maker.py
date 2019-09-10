@@ -7,7 +7,7 @@ import git
 from git import Repo
 
 
-class drush_maker:
+class DrushMaker:
     """Simple Drupal make built class"""
 
     path = ""
@@ -131,9 +131,9 @@ class drush_maker:
 
 def runner_handler(event):
     if len(event) > 0:
-        fc = drush_maker
+        fc = DrushMaker
         #  pass target folder/repo to script
-        fc.make_platform(drush_maker("todo"), event['path'])
+        fc.make_platform(DrushMaker("todo"), event['path'])
 
 
 # Local testing
