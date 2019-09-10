@@ -4,6 +4,7 @@ Prerequisites for Scripts:
 
 2.  Install Git for Python :
 https://gitpython.readthedocs.io/en/stable/intro.html#installing-gitpython
+https://pypi.org/project/GitPython/
 
 3.  Setup Acquia aliases
 
@@ -45,3 +46,19 @@ OR `debug_ssh` to solve ssh-agent issue
 create a simple_task.yaml file.
 
 ---------------
+
+For screen-shot install:
+
+####PyAutoGUI
+https://pypi.org/project/PyAutoGUI/
+
+`pip install pyautogui`
+
+####selenium
+
+https://selenium-python.readthedocs.io/installation.html
+`pip install selenium`
+
+####Install geckodriver
+
+`brew install geckodriver`
