@@ -120,7 +120,7 @@ class AcqUtility:
 
         if "coder_report" in commands.keys():
             coder_report = commands.get('coder_report')
-            print coder_report
+            print(coder_report)
 
             for todo_text, cmd in coder_report.items():
                 print("{todo}-->{cmd}".format(todo=todo_text,cmd=cmd.format(alias=alias)))
@@ -152,10 +152,10 @@ class AcqUtility:
             document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
 
             for todo_text, cmd in commands.items():
-                print cmd.format(alias=alias)
+                print(cmd.format(alias=alias))
                 process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
                 (out, err) = process.communicate()
-                print out
+                print(out)
 
                 document.add_paragraph(todo_text)
                 font = document.add_paragraph("output:\n  {}".format(out))
