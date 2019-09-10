@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 import acapi
-import docx
+from docx import Document
 import yaml
 import datetime
 import time
@@ -118,9 +118,10 @@ class AcqUtility:
             coder_report = commands.get('coder_report')
 
             for todo_text, cmd in coder_report.items():
-                process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
-                (out, err) = process.communicate()
-                print(out)
+                print("{todo}-->{cmd}".format(todo=todo_text,cmd=cmd.format(alias=alias)))
+                # process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
+                # (out, err) = process.communicate()
+                # print(out)
                 # todo: save coder output to file
 
     def mk_site_uli(self):
@@ -140,7 +141,7 @@ class AcqUtility:
         if "one_time_link" in commands.keys():
             commands = commands.get('one_time_link')
 
-            document = docx.Document()
+            document = Document()
             document.add_heading('OTL Document -- {}'.format(self.acq_sub), 0)
             document.add_paragraph('Site Name: {name}'.format(name=site_names))
             document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
