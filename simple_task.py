@@ -96,6 +96,10 @@ class AcqUtility:
         elif action == "otl_doc":
             self.mk_site_uli_doc()
 
+        elif action == "mtp_docs":
+            print(action)
+            # todo: db dump...
+
         elif action == "db_dump":
             print(action)
             # todo: db dump...
