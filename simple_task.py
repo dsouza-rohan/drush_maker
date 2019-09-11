@@ -17,6 +17,7 @@ class AcqUtility:
     acq_env = ""
     acq_site = 0
     allowed = ["dev", "test", "dev6"]
+    commands = ["coder", "otl", "otl_doc", "mtp_doc", "db_dump", "yaml_valid", "debug_ssh"]
     pub_key_path = ""
     pub_key_pass = ""
     local_dir = ""
@@ -28,19 +29,22 @@ class AcqUtility:
         self.acq_env = env
         self.acq_sub = sub
 
-        self.run_setting = self.get_run_settings()
-        if self.run_setting == "":
-            print("To run the script create a simple_task.yaml file")
-        else:
-            if "my_key_path" in self.run_setting.keys():
-                self.pub_key_path = self.run_setting.get('my_key_path')
+        if action in self.commands :
+            self.run_setting = self.get_run_settings()
+            if self.run_setting == "":
+                print("To run the script create a simple_task.yaml file")
             else:
-                sys.exit("my_key_path is not set in yaml")
+                if "my_key_path" in self.run_setting.keys():
+                    self.pub_key_path = self.run_setting.get('my_key_path')
+                else:
+                    sys.exit("my_key_path is not set in yaml")
 
-            if "allowed_env" in self.run_setting.keys():
-                self.allowed = self.run_setting.get('allowed_env')
-            else:
-                sys.exit("allowed_env is not set in yaml")
+                if "allowed_env" in self.run_setting.keys():
+                    self.allowed = self.run_setting.get('allowed_env')
+                else:
+                    sys.exit("allowed_env is not set in yaml")
+        else:
+            sys.exit("Invalid action; {act}".format(act=action))
 
         print("start--")
 
@@ -96,9 +100,8 @@ class AcqUtility:
         elif action == "otl_doc":
             self.mk_site_uli_doc()
 
-        elif action == "mtp_docs":
+        elif action == "mtp_doc":
             print(action)
-            # todo: db dump...
 
         elif action == "db_dump":
             print(action)
