@@ -126,7 +126,7 @@ class AcqUtility:
             print(coder_report)
 
             for todo_text, cmd in coder_report.items():
-                print("{todo}-->{cmd}".format(todo=todo_text,cmd=cmd.format(alias=alias)))
+                print("{todo}-->{cmd}".format(todo=todo_text, cmd=cmd.format(alias=alias)))
                 process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
                 (out, err) = process.communicate()
                 print(out)

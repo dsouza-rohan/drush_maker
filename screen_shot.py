@@ -33,11 +33,11 @@ class ScreenShot:
         time.sleep(5)
 
     def take_ss(self):
-        self.open_firefox("https://www.pfizer.nl")
+        self.open_firefox("https://www.example.nl")
 
         self.full_screen_capture('/Users/rohandsouza/Desktop/omniture.JPEG')
         self.driver.close()
 
 
-ss = ScreenShot
-ss.take_ss(ScreenShot())
+# ss = ScreenShot
+# ss.take_ss(ScreenShot())
