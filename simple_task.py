@@ -17,7 +17,7 @@ class AcqUtility:
     acq_env = ""
     acq_site = 0
     allowed = ["dev", "test", "dev6"]
-    commands = ["coder", "otl", "otl_doc", "mtp_doc", "db_dump", "yaml_valid", "debug_ssh"]
+    commands = ["coder", "otl", "otl_doc", "mtp_doc", "db_dump", "yaml_valid", "debug_ssh", "link2_ssh"]
     pub_key_path = ""
     pub_key_pass = ""
     local_dir = ""
@@ -64,9 +64,35 @@ class AcqUtility:
                 sys.exit("No ssh mode available...yet")
         else:
             sys.exit("Connection to {} is not allowed".format(self.acq_env))
-            # ==>Available envs are !!
-            # for env in envs:
-            #     print "Env: {env} SSH Host: {host}".format(env=env, host=envs[env]['ssh_host'])
+
+    def get_acq_ssh_links(self):
+
+        if self.acq_env in self.allowed:
+            c = acapi.Client()
+            site = c.site(self.acq_sub)
+            envs = site.environments()
+            envs.pop("prod")  # remove prod
+            allow_ssh = []
+
+            for env in envs:
+                print("Env: {env} SSH Host: {host}".format(env=env, host=envs[env]['ssh_host']))
+                allow_ssh.append("{sub}.{env}@{host}".format(sub=self.acq_sub, env=env, host=envs[env]['ssh_host']))
+
+            print("Enter y/n:")
+            open = input()
+            if open == "y":
+                to = self.options_print(allow_ssh)
+                os.system("ssh  {link}".format(link=to))
+        else:
+            sys.exit("Connection to {} is not allowed".format(self.acq_env))
+
+    def options_print(self, array):
+        i = 0
+        for opt in array:
+            print("[{i}]{opt}".format(i=i, opt=opt))
+            i = i+1
+        x = int(input())
+        return array[x]
 
     def get_acq_site_name(self):
         c = acapi.Client()
@@ -114,6 +140,10 @@ class AcqUtility:
         elif action == "debug_ssh":
             print(action)
             self.run_ssh_agent()
+
+        elif action == "link2_ssh":
+            print(action)
+            self.get_acq_ssh_links()
 
         # todo:  and 5x b-fix queries...?
 
