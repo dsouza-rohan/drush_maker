@@ -78,9 +78,10 @@ class AcqUtility:
                 print("Env: {env} SSH Host: {host}".format(env=env, host=envs[env]['ssh_host']))
                 allow_ssh.append("{sub}.{env}@{host}".format(sub=self.acq_sub, env=env, host=envs[env]['ssh_host']))
 
-            print("Enter y/n:")
+            print("Connect to a Host, Enter y/n:")
             open = input()
             if open == "y":
+                print("Select a Host:")
                 to = self.options_print(allow_ssh)
                 os.system("ssh  {link}".format(link=to))
         else:
