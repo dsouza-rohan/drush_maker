@@ -22,7 +22,7 @@ class AcqUtility:
     pub_key_path = ""
     pub_key_pass = ""
     local_dir = ""
-    mode = "drush"  # drush | ssh
+    mode = "drush"  # todo: add ssh mode
     run_setting = ""
     _path = ""
 
@@ -31,7 +31,7 @@ class AcqUtility:
         self.acq_env = env
         self.acq_sub = sub
         self._path = os.getcwd() + "/.tmp/"
-        # todo: auto make tmp folder
+        # todo: add auto make .tmp folder
 
         if action in self.commands :
             self.run_setting = self.get_run_settings()
