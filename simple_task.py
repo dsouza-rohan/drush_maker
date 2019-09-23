@@ -6,6 +6,7 @@ from docx import Document
 import yaml
 import datetime
 import time
+import screen_shot
 
 
 class AcqUtility:
@@ -23,11 +24,14 @@ class AcqUtility:
     local_dir = ""
     mode = "drush"  # drush | ssh
     run_setting = ""
+    _path = ""
 
     def __init__(self, action, sub, env):
         self.action = action
         self.acq_env = env
         self.acq_sub = sub
+        self._path = os.getcwd() + "/.tmp/"
+        # todo: auto make tmp folder
 
         if action in self.commands :
             self.run_setting = self.get_run_settings()
@@ -185,16 +189,30 @@ class AcqUtility:
             document.add_paragraph('Site Name: {name}'.format(name=site_names))
             document.add_paragraph('Subscription: {sub}'.format(sub=self.acq_sub))
 
+            ss = screen_shot.ScreenShot()
+
             for todo_text, cmd in commands.items():
                 print(cmd.format(alias=alias))
-                process = subprocess.Popen([cmd.format(alias=alias)], stdout=subprocess.PIPE, shell=True)
-                (out, err) = process.communicate()
-                print(out)
+                file_name = "{path}{name}.jpeg".format(name=todo_text, path=self._path)
 
-                document.add_paragraph(todo_text)
-                font = document.add_paragraph("output:\n  {}".format(out))
-                font.highlight_color = "red"
-                document.add_page_break()
+                if cmd == "browser_ssl":
+                    print("Enter the production URL where to check SSL:")
+                    prod_url = input()
+                    if prod_url != "":
+                        ss.open_firefox(prod_url, file_name)
+
+                        document.add_paragraph(todo_text)
+                        document.add_picture(file_name)
+                        document.add_page_break()
+                else:
+                    os.system(cmd.format(alias=alias))
+
+                    ss.full_screen_capture(file_name, 3)
+                    os.system('clear')
+
+                    document.add_paragraph(todo_text)
+                    document.add_picture(file_name)
+                    document.add_page_break()
 
             document.save(save_file)
 
