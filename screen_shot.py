@@ -14,7 +14,7 @@ class ScreenShot:
     def __del__(self):
         print("ScreenShot--done")
 
-    def open_firefox(self, url_open):
+    def open_firefox(self, url_open, target):
         # create a new Firefox session
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
@@ -25,18 +25,23 @@ class ScreenShot:
         pyautogui.hotkey('COMMAND', 'i')
         pyautogui.press('up')
         pyautogui.press('up')
+        time.sleep(1)
 
-    def full_screen_capture(self, target):
+        self.full_screen_capture(target, 1)
+        time.sleep(1)
+        self.driver.quit()
+
+    def full_screen_capture(self, target, secs):
         # fullscreen
-        time.sleep(5)
+        time.sleep(secs)
         pyautogui.screenshot(target)
-        time.sleep(5)
+        time.sleep(secs)
 
     def take_ss(self):
         self.open_firefox("https://www.example.nl")
 
-        self.full_screen_capture('/Users/rohandsouza/Desktop/omniture.JPEG')
-        self.driver.close()
+        self.full_screen_capture('/Users/rohandsouza/Desktop/omniture.JPEG', 5)
+        self.driver.quit()
 
 
 # ss = ScreenShot
