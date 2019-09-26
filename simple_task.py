@@ -198,6 +198,7 @@ class AcqUtility:
                 if cmd == "browser_ssl":
                     print("Enter the production URL where to check SSL:")
                     prod_url = input()
+                    # todo: validate entered URL & fail
                     if prod_url != "":
                         ss.open_firefox(prod_url, file_name)
 
@@ -245,7 +246,7 @@ else:
         if sys.argv[1] == "--help":
 
             print("\n  simple_task.py [action] [subscription] [environment] \n" \
-                  " action--> [coder| otl| otl_doc| db_dump ..]\n" \
+                  " action--> [coder| otl| otl_doc| db_dump |link2_ssh..]\n" \
                   " subscription--> Subscription of the site\n" \
                   " environment--> [dev | test]\n " \
                   "\nOR debug_ssh to solve ssh-agent issue \n" \

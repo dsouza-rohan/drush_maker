@@ -23,8 +23,8 @@ class ScreenShot:
         # Navigate to the application home page
         self.driver.get(url_open)
         pyautogui.hotkey('COMMAND', 'i')
-        pyautogui.press('up')
-        pyautogui.press('up')
+        pyautogui.hotkey('up')
+        pyautogui.hotkey('up')
         time.sleep(1)
 
         self.full_screen_capture(target, 1)
