@@ -1,6 +1,6 @@
 Prerequisites for Scripts:
 
-1.  Ensure you have Python version 2: run `python --version`
+1.  Ensure you have Python version 3: run `python --version`
 
 2.  Install Git for Python :
 https://gitpython.readthedocs.io/en/stable/intro.html#installing-gitpython
@@ -62,3 +62,5 @@ https://selenium-python.readthedocs.io/installation.html
 ####Install geckodriver
 
 `brew install geckodriver`
+
+http://macappstore.org/ghostscript/
