@@ -78,4 +78,3 @@ if __name__ == '__main__':
     # pdf.pdf_cat(sys.argv[1:])
     # pdf.pdf_compress(sys.argv[1:])
     pdf.gscompress(sys.argv[1:],3)
-    
